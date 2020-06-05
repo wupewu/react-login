@@ -59,7 +59,7 @@ class Login extends Component {
             type="password"
             hintText="Hasło"
             floatingLabelText="Hasło"
-            onChange={(event, newValue) => this.setState({ login: newValue })}
+            onChange={(event, newValue) => this.setState({ password: newValue })}
           />
           <br />
           <RaisedButton
@@ -76,25 +76,19 @@ class Login extends Component {
   handleClick(event) {
     const payload = {
       login: this.state.login,
-      password: this.state.password,
+      password: this.state.password
     };
     Axios.post(apiBaseUrl + "/login", payload, {
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*"
       },
     })
       .then(function (response) {
         console.log(response);
-        if (response.data.code === 200) {
+        if (response.status === 200) {
           console.log("Udane logowanie!");
-          //       var uploadScreen=[];
-          //       uploadScreen.push(<UploadPage appContext={self.props.appContext} role={self.state.loginRole}/>)
-          //       self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
-        } else if (response.data.code === 204) {
-          console.log("Nieprawidłowy login lub hasło");
-          alert(response.data.success);
-        } else {
+          // TU DODAJ PRZEKIEROWANIE DO STRONY ZE STATSAMI
+	} else {
           console.log("Podany użytkownik nie istnieje");
           alert("Podany użytkownik nie istnieje");
         }
