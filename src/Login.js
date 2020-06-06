@@ -12,31 +12,31 @@ class Login extends Component {
     super(props);
     var localloginComponent = [];
     localloginComponent.push(
-      <MuiThemeProvider key={"theme"}>
-        <div>
-          <TextField
-            hintText="Nazwa użytownika"
-            floatingLabelText="nazwa użytktownika"
-            onChange={(event, newValue) => this.setState({ login: newValue })}
-          />
-          <br />
-          <TextField
-            type="password"
-            hintText="Hasło"
-            floatingLabelText="Hasło"
-            onChange={(event, newValue) =>
-              this.setState({ password: newValue })
-            }
-          />
-          <br />
-          <RaisedButton
-            label="Zaloguj"
-            primary={true}
-            style={style}
-            onClick={(event) => this.handleClick(event)}
-          />
-        </div>
-      </MuiThemeProvider>
+        <MuiThemeProvider key={"theme"}>
+          <div>
+            <TextField
+                hintText="Nazwa użytownika"
+                floatingLabelText="nazwa użytktownika"
+                onChange={(event, newValue) => this.setState({ login: newValue })}
+            />
+            <br />
+            <TextField
+                type="password"
+                hintText="Hasło"
+                floatingLabelText="Hasło"
+                onChange={(event, newValue) =>
+                    this.setState({ password: newValue })
+                }
+            />
+            <br />
+            <RaisedButton
+                label="Zaloguj"
+                primary={true}
+                style={style}
+                onClick={(event) => this.handleClick(event)}
+            />
+          </div>
+        </MuiThemeProvider>
     );
     this.state = {
       login: "",
@@ -47,29 +47,29 @@ class Login extends Component {
   componentWillMount() {
     var localloginComponent = [];
     localloginComponent.push(
-      <MuiThemeProvider key={"theme"}>
-        <div>
-          <TextField
-            hintText="Nazwa użytownika"
-            floatingLabelText="nazwa użytktownika"
-            onChange={(event, newValue) => this.setState({ login: newValue })}
-          />
-          <br />
-          <TextField
-            type="password"
-            hintText="Hasło"
-            floatingLabelText="Hasło"
-            onChange={(event, newValue) => this.setState({ password: newValue })}
-          />
-          <br />
-          <RaisedButton
-            label="Zaloguj"
-            primary={true}
-            style={style}
-            onClick={(event) => this.handleClick(event)}
-          />
-        </div>
-      </MuiThemeProvider>
+        <MuiThemeProvider key={"theme"}>
+          <div>
+            <TextField
+                hintText="Nazwa użytownika"
+                floatingLabelText="nazwa użytktownika"
+                onChange={(event, newValue) => this.setState({ login: newValue })}
+            />
+            <br />
+            <TextField
+                type="password"
+                hintText="Hasło"
+                floatingLabelText="Hasło"
+                onChange={(event, newValue) => this.setState({ password: newValue })}
+            />
+            <br />
+            <RaisedButton
+                label="Zaloguj"
+                primary={true}
+                style={style}
+                onClick={(event) => this.handleClick(event)}
+            />
+          </div>
+        </MuiThemeProvider>
     );
     this.setState({ loginComponent: localloginComponent });
   }
@@ -83,28 +83,44 @@ class Login extends Component {
         "Access-Control-Allow-Origin": "*"
       },
     })
-      .then(function (response) {
-        console.log(response);
-        if (response.status === 200) {
-          console.log("Udane logowanie!");
-          // TU DODAJ PRZEKIEROWANIE DO STRONY ZE STATSAMI
-	} else {
-          console.log("Podany użytkownik nie istnieje");
-          alert("Podany użytkownik nie istnieje");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (response) {
+          console.log(response);
+          if (response.status === 200) {
+            console.log("Udane logowanie!");
+            console.log(response.headers.authorization)
+
+            fetch('http://localhost:8080/events', {
+              headers: new Headers({
+                'Authorization': 'TuWklejToken',
+                'Content-Type': 'application/x-www-form-urlencoded'
+              })
+            })
+                .then(response => response.json())
+                .then((jsonData) => {
+                  // jsonData is parsed json object received from url
+                  console.log(jsonData['_embedded']['coronaEvents'])
+                })
+                .catch((error) => {
+                  // handle your errors here
+                  console.error(error)
+                })
+          } else {
+            console.log("Podany użytkownik nie istnieje");
+            alert("Podany użytkownik nie istnieje");
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
   }
   render() {
     return (
-      <div>
-        <MuiThemeProvider>
-          <AppBar title="Zaloguj" />
-        </MuiThemeProvider>
-        {this.state.loginComponent}
-      </div>
+        <div>
+          <MuiThemeProvider>
+            <AppBar title="Zaloguj" />
+          </MuiThemeProvider>
+          {this.state.loginComponent}
+        </div>
     );
   }
 }
